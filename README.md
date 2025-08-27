@@ -1,12 +1,23 @@
-# React + Vite
+# Gestor de Tareas - Programación Web 2025
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto corresponde a la tarea **hw-04** del curso de Programación Web 2025. creado por Karla Lopez -1510421-
+La aplicación es un gestor de tareas desarrollado con **React + Vite**, desplegado automáticamente en **Amazon S3** y distribuido mediante **CloudFront** utilizando GitHub Actions y Doppler para la gestión de secretos.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+###  Hooks utilizados
 
-## Expanding the ESLint configuration
+En este proyecto se utilizaron los siguientes **React Hooks**:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **useState**  
+  Se utilizó para manejar el estado de las tareas (agregar, filtrar, eliminar).  
+  Permite gestionar el estado interno de los componentes de forma sencilla y reactiva.
+
+- **useEffect**  
+  Se utilizó para **persistir el estado en localStorage**, de manera que las tareas no se pierdan al recargar la página.  
+  Permite ejecutar efectos secundarios (sincronización con almacenamiento) en el ciclo de vida del componente.
+
+###  URL del CDN (CloudFront)
+https://d77yiv1xj7gjx.cloudfront.net/
+
+###  Evidencia (capturas de pantalla)
+Las imágenes se encuentran en la carpeta docs/images 
