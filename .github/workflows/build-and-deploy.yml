@@ -2,7 +2,8 @@ name: build-and-deploy
 
 on:
   push:
-    branches: [ hw-04 ]  
+    branches: [ hw-04 ]
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -29,4 +30,28 @@ jobs:
           doppler-token: ${{ secrets.DOPPLER_TOKEN }}
 
       - name: Export env from Doppler
-        run: doppler secrets download --no-file --format env >
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+        run: |
+          doppler secrets download --no-file --format env | tee -a "$GITHUB_ENV" > /dev/null
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Check required env names
+        run: |
+          for v in S3_BUCKET CLOUDFRONT_DISTRIBUTION_ID; do
+            if [ -z "${!v}" ]; then
+              echo "::error::Environment variable '$v' is empty or missing"; exit 1;
+            fi
+          done
+
+      - name: Upload to S3
+        run: aws s3 sync dist/ "s3://${{ env.S3_BUCKET }}" --delete
+
+      - name: Invalidate CloudFront
+        run: aws cloudfront create-invalidation --distribution-id "${{ env.CLOUDFRONT_DISTRIBUTION_ID }}" --paths "/*"
