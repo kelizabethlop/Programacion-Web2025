@@ -3,25 +3,20 @@ name: build-and-deploy
 on:
   push:
     branches: [ hw-04 ]
+  workflow_dispatch:  # opcional para lanzarlo manual
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install deps
-        run: npm ci
-
-      - name: Build (Vite)
-        run: npm run build
+      - run: npm ci
+      - run: npm run build
 
       - name: Setup Doppler
         uses: dopplerhq/cli-action@v3
@@ -29,6 +24,8 @@ jobs:
           doppler-token: ${{ secrets.DOPPLER_TOKEN }}
 
       - name: Export env from Doppler
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
         run: doppler secrets download --no-file --format env >> $GITHUB_ENV
 
       - name: Configure AWS Credentials
